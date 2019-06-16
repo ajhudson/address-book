@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>test</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        .container { margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Knockout Test App</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">Section 1</a></li>
+                <li><a href="#">Section 2</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+
+    <div class="container">
+        <div class="row">
+            <button class="btn btn-primary btn-lg" id="modal-btn" data-modal-target="my-modal">Test</button>
+            <button class="btn btn-info btn-lg" id="ko-modal" data-bind="bootstrapModal: { modaltarget: 'my-modal', okcallback: onok }">KO Modal test</button>
+        </div>
+        
+        <div class="row">
+            <div class="form">
+                <div class="form-group">
+                    <label>Enter something:</label>
+                    <input type="text" class="form-control" data-bind="value: somevalue">
+                </div>
+            </div>
+            <p data-bind="text: somevalue"></p>
+        </div>
+    </div>
+
+    <div id="my-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-closemodal="true">&times;</button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-closemodal="true">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-okmodal="true">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/knockout/build/output/knockout-latest.debug.js"></script>
+
+    <script>
+        $(function() {
+            ko.bindingHandlers.bootstrapModal = {
+                init: function(el, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var args = valueAccessor();
+                    var modalTarget = args.modaltarget;
+                    var okCallback = args.okcallback;
+                    var modalEl = $("#" + modalTarget);
+
+                    $(el).on("click", function() {
+                        modalEl.modal("show");
+                    });
+
+                    modalEl.find("button[data-closemodal='true']").on("click", function() {
+                        modalEl.modal("hide");
+                    });
+
+                    modalEl.find("button[data-okmodal='true']").on("click", function() {
+                        if (typeof okCallback === "function") {
+                            okCallback();
+                        }
+                        modalEl.modal("hide");
+                    });
+                    
+                }
+            };
+
+            var vm = {
+                somevalue: ko.observable("First Value"),
+                onok: function() {
+                    alert("this is on ok");
+                }
+            };
+
+            ko.applyBindings(vm);
+        });
+
+        
+    </script>
+
+</body>
+</html>
