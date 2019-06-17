@@ -15,13 +15,12 @@ ah.koUtils.sortByProperty = function(arr, propertyName, isDescending) {
     });
 }
 
-function Contact(id, firstname, surname, address1, address2, address3, town, county, postcode, telephone, mobile, email) {
+function Contact(id, firstname, surname, address1, address2, town, county, postcode, telephone, mobile, email) {
     this.id = id;
     this.firstname = firstname;
     this.surname = surname;
     this.address1 = address1;
     this.address2 = address2;
-    this.address3 = address3;
     this.town = town;
     this.county = county;
     this.postcode = postcode;
@@ -44,7 +43,6 @@ var dataObj = (function() {
             new Col("Surname", "surname"),
             new Col("Address 1", "address1"),
             new Col("Address 2", "address 2"),
-            new Col("Address 3", "address3"),
             new Col("Town", "town"),
             new Col("County", "county"),
             new Col("Post Code", "postcode"),
@@ -53,10 +51,10 @@ var dataObj = (function() {
             new Col("Email Address", "email")
         ],
         data: [
-            new Contact(101, "Jim", "Bowen", "123 Wibble Street", "Coppull", null, "Chorley", "Lancashire", "PR7 1AB", "01257 111111", "07123 111111", "jim.bowen@example.com"),
-            new Contact(102, "Terry", "Wogan", "87 Spendmore Avenue", "Coppull", "Near. Chorley", "Chorley", "Lancashire", "PR7 2AC", "01257 222222", "07123 222222", "terry.wogan@example.com"),
-            new Contact(103, "Jimmy", "Anderson", "62 Cricketers Way", "Coppull", null, "Chorley", "Lancashire", "PR7 2KE", "01257 333333", "07123 333333", "jimmy.anderson@example.com"),
-            new Contact(104, "Will", "Grigg", "28 Greenfield Court", null, null, "Sunderland", "Tyne and Wear", "SR5 1RU", "0191 123 4444", "07123 444444", "wg@example.com")
+            new Contact(101, "Jim", "Bowen", "123 Wibble Street", "Coppull", "Chorley", "Lancashire", "PR7 1AB", "01257 111111", "07123 111111", "jim.bowen@example.com"),
+            new Contact(102, "Terry", "Wogan", "87 Spendmore Avenue", "Coppull", "Chorley", "Lancashire", "PR7 2AC", "01257 222222", "07123 222222", "terry.wogan@example.com"),
+            new Contact(103, "Jimmy", "Anderson", "62 Cricketers Way", "Coppull", "Chorley", "Lancashire", "PR7 2KE", "01257 333333", "07123 333333", "jimmy.anderson@example.com"),
+            new Contact(104, "Will", "Grigg", "28 Greenfield Court", null, "Sunderland", "Tyne and Wear", "SR5 1RU", "0191 123 4444", "07123 444444", "wg@example.com")
         ]
     };
 
@@ -95,13 +93,17 @@ var vm = function(data) {
     }
 
     var saveNewContact = function() {
+
+        alert('in progress');
+
+        return;
+
         var newId = getNewContactId();
         var nc = newContact();
         nc.id = newId;
 
         contacts.push(nc);
         newContact(new Contact());
-        closeModal();
     };
 
     var getNewContactId = function() {
@@ -114,16 +116,15 @@ var vm = function(data) {
     }
 
     return {
+        newContactFirstname: ko.observable().extend({fieldIsRequired: "First name is required"}),
         contacts: contacts,
         numberOfContacts: numberOfContacts,
-        showModal: showModal,
-        closeModal: closeModal,
-        modalIsOpen: modalIsOpen,
         saveNewContact: saveNewContact,
-        newContact: newContact,
         sortBySurname: sortBySurname,
         surnameSortIsDescending: surnameSortIsDescending
     };
 };
+
+
 
 ko.applyBindings(vm(dataObj));
