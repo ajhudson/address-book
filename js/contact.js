@@ -94,9 +94,13 @@ var vm = function(data) {
 
     var saveNewContact = function() {
 
-        alert('in progress');
+        formViewModel.touchEverything();
+        
+        if (!formViewModel.isValid()) {
+            return false;
+        }
 
-        return;
+        return true;
 
         var newId = getNewContactId();
         var nc = newContact();
@@ -104,6 +108,10 @@ var vm = function(data) {
 
         contacts.push(nc);
         newContact(new Contact());
+    };
+
+    var resetForm = function() {
+        formViewModel.reset();
     };
 
     var getNewContactId = function() {
@@ -115,8 +123,38 @@ var vm = function(data) {
         return newId;
     }
 
+    // View Model for validation of a new contact
+    var NewContactFormViewModel = function () {
+        
+        var newContactFirstname = ko.observable().extend({fieldIsRequired: "First name is required"});
+
+        var isValid = ko.computed(function() {
+            return !newContactFirstname.hasFailedValidation();
+        });
+
+        var touchEverything = function() {
+            newContactFirstname.beenTouched(true);
+        };
+
+        var reset = function() {
+            newContactFirstname("");
+            newContactFirstname.beenTouched(false);
+
+        };
+
+        return {
+            newContactFirstname: newContactFirstname,
+            touchEverything: touchEverything,
+            isValid: isValid,
+            reset: reset
+        }
+    };
+
+    var formViewModel = new NewContactFormViewModel();
+
     return {
-        newContactFirstname: ko.observable().extend({fieldIsRequired: "First name is required"}),
+        newContactFormViewModel: formViewModel,
+        resetForm: resetForm,
         contacts: contacts,
         numberOfContacts: numberOfContacts,
         saveNewContact: saveNewContact,

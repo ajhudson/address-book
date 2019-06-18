@@ -3,6 +3,7 @@ ko.bindingHandlers.bootstrapModal = {
         var args = valueAccessor();
         var modalTarget = args.modaltarget;
         var okCallback = args.okcallback;
+        var cancelCallback = args.cancelCallback;
         var modalEl = $("#" + modalTarget);
 
         
@@ -10,38 +11,28 @@ ko.bindingHandlers.bootstrapModal = {
             modalEl.modal("show");
         });
 
+        // to be invoked when modal is either cancelled or closed
         modalEl.find("button.close[data-dismiss='modal']").on("click", function() {
-            modalEl.modal("hide");
-        });
-        
-        modalEl.find("button.btn.btn-primary[data-dismiss='modal']").on("click", function() {
-            if (typeof okCallback === "function") {
-                okCallback();
+
+            if (typeof cancelCallback === "function") {
+                cancelCallback();
             }
+
             modalEl.modal("hide");
         });
         
-        
+        // to be invoked when ok is clicked
+        modalEl.find("button.btn.btn-primary[data-ok='modal']").on("click", function() {
+            
+            var doClose = true;
+            
+            if (typeof okCallback === "function") {
+                doClose = okCallback();
+            }
+
+            if (doClose) {
+                modalEl.modal("hide");
+            }
+        });
     }
 };
-
-ko.extenders.fieldIsRequired = function(target, overrideMessage) {
-    target.beenTouched = ko.observable(false);
-    target.hasFailedValidation = ko.observable(false);
-    target.validationMessage = ko.observable();
-    target.hasError = ko.computed(function() {
-        return target.beenTouched() && target.hasFailedValidation();
-    });
- 
-    function validate(newValue, isUntouched) {
-        target.beenTouched(!isUntouched);
-        target.hasFailedValidation(newValue ? false : true);
-        target.validationMessage(newValue ? "" : overrideMessage || "This field is required");
-    }
- 
-    validate(target(), true);
- 
-    target.subscribe(validate);
-
-    return target;
-}
