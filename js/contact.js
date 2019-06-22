@@ -127,23 +127,28 @@ var vm = function(data) {
     var NewContactFormViewModel = function () {
         
         var newContactFirstname = ko.observable().extend({fieldIsRequired: "First name is required"});
+        var newContactSurname = ko.observable().extend({fieldIsRequired: "Surname is required"});
 
         var isValid = ko.computed(function() {
-            return !newContactFirstname.hasFailedValidation();
+            return  !newContactFirstname.hasFailedValidation() &&
+                    !newContactSurname.hasFailedValidation();
         });
 
         var touchEverything = function() {
             newContactFirstname.beenTouched(true);
+            newContactSurname.beenTouched(true);
         };
 
         var reset = function() {
             newContactFirstname("");
             newContactFirstname.beenTouched(false);
-
+            newContactSurname("");
+            newContactSurname.beenTouched(false);
         };
 
         return {
             newContactFirstname: newContactFirstname,
+            newContactSurname: newContactSurname,
             touchEverything: touchEverything,
             isValid: isValid,
             reset: reset

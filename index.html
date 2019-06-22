@@ -69,14 +69,15 @@
                         <div class="form-group" data-bind="css: { 'has-error': newContactFirstname.hasError() }">
                             <label for="firstname">First name:</label>
                             <input type="text" class="form-control" placeholder="First name" data-bind="value: newContactFirstname, valueUpdate: 'afterkeydown'">
-                            <span data-bind='visible: newContactFirstname.hasError(), text: newContactFirstname.validationMessage'> </span>
+                            <span data-bind="visible: newContactFirstname.hasError(), text: newContactFirstname.validationMessage"> </span>
+                        </div>
+                        <div class="form-group" data-bind="css: { 'has-error': newContactSurname.hasError() }">
+                            <label for="surname">Surname:</label>
+                            <input type="text" class="form-control" placeholder="Surname" data-bind="value: newContactSurname, valueUpdate: 'afterkeydown'">
+                            <span data-bind="visible: newContactSurname.hasError(), text: newContactSurname.validationMessage"></span>
                         </div>
 
                         <!--
-                        <div class="form-group">
-                            <label for="surname">Surname:</label>
-                            <input type="text" class="form-control" placeholder="Surname" data-bind="value: surname">
-                        </div>
                         <div class="form-group">
                             <label for="address1">Address 1:</label>
                             <input type="text" class="form-control" placeholder="Address 1" data-bind="value: address1">
