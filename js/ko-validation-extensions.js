@@ -7,9 +7,6 @@ ko.extenders.fieldIsRequired = function(target, overrideMessage) {
     });
  
     function validate(newValue, isUntouched) {
-
-        console.log(newValue);
-
         target.beenTouched(!isUntouched);
         target.hasFailedValidation(newValue ? false : true);
         target.validationMessage(newValue ? "" : overrideMessage || "This field is required");

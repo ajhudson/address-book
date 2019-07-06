@@ -36,3 +36,17 @@ ko.bindingHandlers.bootstrapModal = {
         });
     }
 };
+
+ko.bindingHandlers.sortColumn = {
+    init: function(el, valueAccessor, allBindings, viewModel, bindingContext) {
+
+        $(el).on("click", function() {
+            var newSortByValue = allBindings.get('columnName');
+            var val = valueAccessor();
+            val(newSortByValue);
+        });
+
+        //var col = allBindings.get('columnName');
+        //valueAccessor(col);
+    }
+};

@@ -69,20 +69,35 @@ var vm = function(data) {
     var surnameSortIsDescending = ko.observable();
     var modalIsOpen = ko.observable(false);
     var newContact = ko.observable(new Contact());
-
-    var sortBySurname = function() {
-        if (surnameSortIsDescending() === undefined) {
-            surnameSortIsDescending(false);
-        } else {
-            surnameSortIsDescending(!surnameSortIsDescending());
-        }
-
-        ah.koUtils.sortByProperty(contacts, "surname", surnameSortIsDescending());
-    }
+    var sortBy = ko.observable("id");
+    var sortDescending = ko.observable(false);
 
     var numberOfContacts = ko.computed(function() {
         return contacts().length;
     });
+
+    var sortByChanges = (function(sb, isDescending) {
+
+        var previousValue = sb();
+
+        sb.subscribe(function (oldCol) {
+            previousValue = oldCol;
+        }, null, 'beforeChange');
+    
+        sb.subscribe(function (col) {
+            if (previousValue == col) {
+                var oldIsDescendingValue = isDescending();
+                var newIsDescendingValue = !oldIsDescendingValue;
+                isDescending(newIsDescendingValue);
+            } else {
+                isDescending(false);
+            }
+
+           ah.koUtils.sortByProperty(contacts, col, isDescending()); 
+        });
+    })(sortBy, sortDescending);
+
+    
 
     var showModal = function() {
         modalIsOpen(true);
@@ -123,38 +138,6 @@ var vm = function(data) {
         return newId;
     }
 
-    // View Model for validation of a new contact
-    var NewContactFormViewModel = function () {
-        
-        var newContactFirstname = ko.observable().extend({fieldIsRequired: "First name is required"});
-        var newContactSurname = ko.observable().extend({fieldIsRequired: "Surname is required"});
-
-        var isValid = ko.computed(function() {
-            return  !newContactFirstname.hasFailedValidation() &&
-                    !newContactSurname.hasFailedValidation();
-        });
-
-        var touchEverything = function() {
-            newContactFirstname.beenTouched(true);
-            newContactSurname.beenTouched(true);
-        };
-
-        var reset = function() {
-            newContactFirstname("");
-            newContactFirstname.beenTouched(false);
-            newContactSurname("");
-            newContactSurname.beenTouched(false);
-        };
-
-        return {
-            newContactFirstname: newContactFirstname,
-            newContactSurname: newContactSurname,
-            touchEverything: touchEverything,
-            isValid: isValid,
-            reset: reset
-        }
-    };
-
     var formViewModel = new NewContactFormViewModel();
 
     return {
@@ -163,8 +146,7 @@ var vm = function(data) {
         contacts: contacts,
         numberOfContacts: numberOfContacts,
         saveNewContact: saveNewContact,
-        sortBySurname: sortBySurname,
-        surnameSortIsDescending: surnameSortIsDescending
+        sortBy: sortBy
     };
 };
 

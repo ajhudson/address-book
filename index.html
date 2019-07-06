@@ -29,14 +29,16 @@
             <p>Creating a mock address contact app</p>
         </div>
 
+        <p>Sort by: <span data-bind="text: sortBy"></span></p>
+
         <table class="table table-striped">
             <thead>
-                <th>ID</th>
-                <th>Firstname</th>
-                <th><a href="#" data-bind="click: sortBySurname">Surname</a></th>
-                <th>Address 1</th>
-                <th>Post Code</th>
-                <th>Email Address</th>
+                <th><a href="#" data-bind="sortColumn: sortBy, columnName: 'id'">ID</a></th>
+                <th><a href="#" data-bind="sortColumn: sortBy, columnName: 'firstname'">Firstname</a></th>
+                <th><a href="#" data-bind="sortColumn: sortBy, columnName: 'surname'">Surname</a></th>
+                <th><a href="#" data-bind="sortColumn: sortBy, columnName: 'address1'">Address 1</a></th>
+                <th><a href="#" data-bind="sortColumn: sortBy, columnName: 'postcode'">Post Code</a></th>
+                <th><a href="#" data-bind="sortColumn: sortBy, columnName: 'email'">Email</a></th>
             </thead>
             <tbody data-bind="foreach: contacts">
                 <td data-bind="text: id"></td>
@@ -65,7 +67,7 @@
                     <h4 class="modal-title">Add New Contact</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form" data-bind="using: newContactFormViewModel">
+                    <form class="form" data-bind="using: newContactFormViewModel.formFields">
                         <div class="form-group" data-bind="css: { 'has-error': newContactFirstname.hasError() }">
                             <label for="firstname">First name:</label>
                             <input type="text" class="form-control" placeholder="First name" data-bind="value: newContactFirstname, valueUpdate: 'afterkeydown'">
@@ -126,6 +128,7 @@
     <script src="node_modules/knockout/build/output/knockout-latest.debug.js"></script>
     <script src="js/ko-custom-bindings.js"></script>
     <script src="js/ko-validation-extensions.js"></script>
+    <script src="js/contact-form-view-model.js"></script>
     <script src="js/contact.js"></script>
 
     
