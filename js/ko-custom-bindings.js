@@ -42,11 +42,16 @@ ko.bindingHandlers.sortColumn = {
 
         $(el).on("click", function() {
             var newSortByValue = allBindings.get('columnName');
-            var val = valueAccessor();
-            val(newSortByValue);
-        });
+            var currentSortByCol = valueAccessor();
+            
+            if (currentSortByCol() === newSortByValue) {
+                var sortDescendingValue = viewModel.sortDescending();
+                viewModel.sortDescending(!sortDescendingValue);
 
-        //var col = allBindings.get('columnName');
-        //valueAccessor(col);
+                return;
+            }
+
+            currentSortByCol(newSortByValue);
+        });
     }
 };
